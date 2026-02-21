@@ -6,21 +6,19 @@
  * Runs as PreToolUse hook on Bash tool calls.
  */
 
+const fs = require('fs');
 const { log } = require('./utils');
 
-let data = '';
-process.stdin.setEncoding('utf8');
-process.stdin.on('data', chunk => { data += chunk; });
-process.stdin.on('end', () => {
-  try {
-    const input = JSON.parse(data);
-    const cmd = input.tool_input?.command || '';
-    if (/git\s+push/.test(cmd)) {
-      log('[Hook] WARNING: About to run: ' + cmd.trim());
-      log('[Hook] Confirm this push is intentional before proceeding.');
-    }
-  } catch (e) {
-    // Ignore parse errors - allow tool call to proceed
+try {
+  const data = fs.readFileSync(0, 'utf8'); // synchronous stdin read
+  const input = JSON.parse(data);
+  const cmd = input.tool_input?.command || '';
+  if (/git\s+push/.test(cmd)) {
+    log('[Hook] WARNING: About to run: ' + cmd.trim());
+    log('[Hook] Confirm this push is intentional before proceeding.');
   }
-  process.exit(0);
-});
+} catch (e) {
+  // Ignore errors - allow tool call to proceed
+}
+
+process.exit(0);
