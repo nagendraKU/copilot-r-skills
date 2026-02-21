@@ -1,42 +1,30 @@
 #!/usr/bin/env node
 /**
- * Documentation File Warning Hook
+ * Documentation File Blocker Hook
  *
- * Warns when Claude tries to create random .md or .txt files,
+ * Blocks creation of random .md or .txt files,
  * encouraging consolidation into README.md or CLAUDE.md.
  * Runs as PreToolUse hook on Write tool calls.
+ * Exits 2 to block the write and surface the message in the UI.
  */
 
 const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const { log } = require('./utils');
 
 const ALLOWED = /(README|CLAUDE|AGENTS|CONTRIBUTING|SKILL)\.md$/;
 const DOC_PATTERN = /\.(md|txt)$/;
-const diagFile = path.join(os.tmpdir(), 'claude-doc-blocker-diag.txt');
-
-function diag(msg) {
-  fs.appendFileSync(diagFile, new Date().toISOString() + ' ' + msg + '\n');
-}
-
-diag('hook started');
 
 try {
   const data = fs.readFileSync(0, 'utf8');
-  diag('stdin read ok, length=' + data.length);
   const input = JSON.parse(data);
   const filePath = input.tool_input?.file_path || '';
-  diag('filePath=' + filePath);
   if (DOC_PATTERN.test(filePath) && !ALLOWED.test(filePath)) {
-    log('[Hook] WARNING: Creating documentation file: ' + filePath);
-    log('[Hook] Consider consolidating docs in README.md or CLAUDE.md');
-    diag('warning logged');
+    console.log('[Hook] BLOCKED: Do not create documentation file: ' + filePath);
+    console.log('[Hook] Consolidate docs into README.md or CLAUDE.md instead.');
+    console.log('[Hook] Allowed names: README.md, CLAUDE.md, AGENTS.md, CONTRIBUTING.md, SKILL.md');
+    process.exit(2);
   }
 } catch (e) {
-  diag('error: ' + e.message);
-  log('[Hook] doc-blocker error: ' + e.message);
+  // Ignore errors - allow tool call to proceed
 }
 
-diag('hook done');
 process.exit(0);
