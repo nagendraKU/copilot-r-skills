@@ -152,10 +152,10 @@ yes  # or "proceed" to start implementation
 # - session-start: Reports available history on startup
 # - session-end: Persists session state for continuity
 # - doc-blocker: Warns about creating random .md files
-# - git-push-warning: Warns before any git push
+# - git-push-warn: Warns before any git push
 
 # Hooks are transparent - you'll see their output in the session:
-[Hook] Context window usage: 45/50 tool calls. Consider /compact soon.
+[StrategicCompact] 50 tool calls reached - consider /compact if transitioning phases
 [Hook] WARNING: About to run: git push origin main
 [Hook] Confirm this push is intentional before proceeding.
 ```
@@ -245,7 +245,7 @@ claude-research → /plan → claude-dev → /tdd → implement → /verify → 
 | **session-start** | SessionStart | Reports available session history and learned skills |
 | **session-end** | SessionEnd | Persists session state for continuity |
 | **doc-blocker** | PreToolUse (Write .md) | Warns about creating random .md files |
-| **git-push-warning** | PreToolUse (Bash) | Warns before any `git push` to prevent accidental pushes |
+| **git-push-warn** | PreToolUse (Bash) | Warns before any `git push` to prevent accidental pushes |
 
 These hooks help optimise context window usage and workflow safety by:
 
@@ -305,6 +305,9 @@ cp -r claude-code-r-skills/contexts/ /path/to/your/project/
 ### Option 3: Copy to user configuration
 
 ``` bash
+# Create directories if they don't exist, then copy
+mkdir -p ~/.claude/skills ~/.claude/rules ~/.claude/commands ~/.claude/agents ~/.claude/contexts
+
 # Copy skills to global config
 cp -r .claude/skills/* ~/.claude/skills/
 
@@ -376,7 +379,9 @@ claude-code-r-skills/
 │   │       ├── suggest-compact.js   # Strategic compaction
 │   │       ├── pre-compact.js       # Save state before compact
 │   │       ├── session-start.js     # Load previous context
-│   │       └── session-end.js       # Persist session state
+│   │       ├── session-end.js       # Persist session state
+│   │       ├── doc-blocker.js       # Warn about random .md file creation
+│   │       └── git-push-warn.js     # Warn before git push
 │   └── skills/
 │       ├── tidyverse-patterns/
 │       ├── rlang-patterns/

@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 /**
- * Git Push Blocker Hook
+ * Git Push Warning Hook
  *
- * Blocks git push to prevent accidental pushes.
+ * Warns before git push to prevent accidental pushes.
  * Runs as PreToolUse hook on Bash tool calls.
- * Exits 2 to block and surface the message in the UI.
  */
 
 const fs = require('fs');
@@ -19,10 +18,8 @@ try {
   // Only check the first line to avoid matching "git push" in heredoc content
   const firstLine = cmd.split('\n')[0].trim();
   if (/^git\s+push/.test(firstLine)) {
-    console.error('[Hook] BLOCKED: git push requires explicit user confirmation.');
-    console.error('[Hook] Command: ' + cmd.trim());
-    console.error('[Hook] Ask the user to confirm before pushing.');
-    process.exit(2);
+    console.error('[Hook] WARNING: About to run: ' + cmd.trim());
+    console.error('[Hook] Confirm this push is intentional before proceeding.');
   }
 } catch (e) {
   // Ignore errors - allow tool call to proceed
