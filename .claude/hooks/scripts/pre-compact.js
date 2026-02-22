@@ -14,10 +14,12 @@ const {
   findFiles,
   ensureDir,
   appendFile,
-  log
+  log,
+  isHookDisabled
 } = require('./utils');
 
 async function main() {
+  if (isHookDisabled('pre-compact')) process.exit(0);
   const sessionsDir = getSessionsDir();
   const compactionLog = path.join(sessionsDir, 'compaction-log.txt');
 

@@ -11,10 +11,12 @@ const {
   getLearnedSkillsDir,
   findFiles,
   ensureDir,
-  log
+  log,
+  isHookDisabled
 } = require('./utils');
 
 async function main() {
+  if (isHookDisabled('session-start')) process.exit(0);
   const sessionsDir = getSessionsDir();
   const learnedDir = getLearnedSkillsDir();
 

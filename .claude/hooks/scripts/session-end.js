@@ -15,10 +15,12 @@ const {
   ensureDir,
   writeFile,
   appendFile,
-  log
+  log,
+  isHookDisabled
 } = require('./utils');
 
 async function main() {
+  if (isHookDisabled('session-end')) process.exit(0);
   const sessionsDir = getSessionsDir();
   ensureDir(sessionsDir);
 

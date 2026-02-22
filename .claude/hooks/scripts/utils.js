@@ -140,6 +140,53 @@ function log(message) {
   console.error(message);
 }
 
+/**
+ * Check if a hook is disabled.
+ *
+ * Checks in priority order:
+ *  1. CLAUDE_DISABLE_ALL_HOOKS=1  — disables every hook
+ *  2. CLAUDE_DISABLE_HOOKS=a,b,c  — disables named hooks for this process
+ *  3. .claude/hooks/state.json    — persistent per-project disable list
+ *
+ * To disable a hook for the current session only (no file edits needed):
+ *   export CLAUDE_DISABLE_HOOKS=doc-blocker
+ *   export CLAUDE_DISABLE_HOOKS=doc-blocker,git-push-warn
+ *   export CLAUDE_DISABLE_ALL_HOOKS=1
+ *
+ * To disable persistently for a project, edit .claude/hooks/state.json:
+ *   { "disabled": ["doc-blocker"] }
+ *
+ * Available hook names:
+ *   doc-blocker, git-push-warn, suggest-compact,
+ *   session-start, session-end, pre-compact
+ *
+ * @param {string} hookName - Hook name (e.g. 'git-push-warn', 'doc-blocker')
+ * @returns {boolean}
+ */
+function isHookDisabled(hookName) {
+  // 1. Kill-switch: disable every hook
+  if (process.env.CLAUDE_DISABLE_ALL_HOOKS === '1') return true;
+
+  // 2. Env-var list: CLAUDE_DISABLE_HOOKS=doc-blocker,git-push-warn
+  const envList = process.env.CLAUDE_DISABLE_HOOKS;
+  if (envList) {
+    const names = envList.split(',').map(s => s.trim());
+    if (names.includes(hookName)) return true;
+  }
+
+  // 3. Persistent state file: .claude/hooks/state.json
+  // Use __dirname (script location) rather than process.cwd() since Claude Code
+  // may run hooks from a different working directory than the project root.
+  // Scripts live at .claude/hooks/scripts/, state.json is at .claude/hooks/state.json
+  const stateFile = path.join(__dirname, '..', 'state.json');
+  try {
+    const state = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
+    return Array.isArray(state.disabled) && state.disabled.includes(hookName);
+  } catch (e) {
+    return false;
+  }
+}
+
 module.exports = {
   getClaudeDir,
   getSessionsDir,
@@ -154,5 +201,6 @@ module.exports = {
   getTimeString,
   shortId,
   findFiles,
-  log
+  log,
+  isHookDisabled
 };

@@ -13,9 +13,10 @@
  */
 
 const path = require('path');
-const { getTempDir, readFile, writeFile, log } = require('./utils');
+const { getTempDir, readFile, writeFile, log, isHookDisabled } = require('./utils');
 
 async function main() {
+  if (isHookDisabled('suggest-compact')) process.exit(0);
   // Use session-specific counter based on session ID or parent PID
   const sessionId = process.env.CLAUDE_SESSION_ID || process.ppid || 'default';
   const counterFile = path.join(getTempDir(), `claude-tool-count-${sessionId}`);
