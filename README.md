@@ -6,7 +6,7 @@ A curated collection of Claude Code configurations for modern R use. These skill
 
 I use Positron, but if you are a VSCode user there is also a plugin for R language server for code intelligence.
 
-A note on scientific reasoning: we test hypotheses; we never prove them. Claude is instructed to reason from evidence, maintain healthy scepticism, quantify uncertainty explicitly (preferring Bayesian framing), and never tell you what you want to hear at the expense of accuracy.
+To try and pre-empt some of the issues with LLMs being reinforced to please the user, I've added a scientific reasoning principle to CLAUDE.md: we test hypotheses; we never prove them. Claude is instructed to reason from evidence, maintain healthy scepticism, quantify uncertainty explicitly (preferring Bayesian framing), and never tell the user what it thinks want to hear at the expense of accuracy. This doesn't seem to prevent the "telling you what it thinks you want to hear" problem entirely, but is hopefully better than nothing.
 
 ## Table of Contents
 
