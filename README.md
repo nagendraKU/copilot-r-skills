@@ -1,6 +1,6 @@
 # Claude Code R Skills
 
-*Version 1.2.3 | Last updated: 2026-02-21*
+*Version 1.2.4 | Last updated: 2026-04-05*
 
 A curated collection of Claude Code configurations for modern R use. These skills, rules, commands, and agents help Claude Code understand R best practices and generate idiomatic, high-quality R code. Additionally the rules and commands help with efficient token usage and enforce constraints, and agents can perform specific tasks. Obviously you can fork and adapt any of these to your case-use.
 
@@ -44,6 +44,8 @@ This project uses and builds on the work of:
 -   [**Affaan Mustafa's Everything Claude Code**](https://github.com/affaan-m/everything-claude-code) - Framework structure, rules, commands, and agents adapted for R development from Affan's Hackathon winning code
 
 -   [**Posit's testing-r-packages Skill**](https://github.com/posit-dev/skills/tree/main/r-lib/testing-r-packages) - testthat Edition 3 patterns, test design principles, and comprehensive expectations reference incorporated into the tdd-workflow skill
+
+-   [**statzhero's tidy-r-skill**](https://github.com/statzhero/tidy-r-skill) - Join quality control patterns (`relationship`, `na_matches`, `tidylog`), NA-safe filtering with `filter_out()`, `when_any()`/`when_all()`, `replace_when()` for in-place conditional updates, and `cli::cli_abort()` structured error messages incorporated into the tidyverse-patterns and r-style-guide skills
 
 -   As an aside, I use Quarto in my workflow and use [Posit's Quarto plugin](https://github.com/posit-dev/skills) which you can add with: `/plugin marketplace add posit-dev/skills` and then `/plugin install quarto@posit-dev-skills`.
 

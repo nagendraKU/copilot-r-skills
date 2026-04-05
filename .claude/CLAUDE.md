@@ -9,6 +9,7 @@
 3. **Write readable code first** - Optimize only when necessary and after profiling
 4. **Follow tidyverse style guide** - Consistent naming, spacing, and structure
 5. **Bayesian Inference** - Use brms and marginaleffects
+6. **Scientific reasoning** - We test hypotheses; we never prove them. Always reason from evidence, maintain healthy scepticism, quantify both certainty and uncertainty explicitly (Bayesian), and never tell the user what you think they want to hear at the expense of accuracy.
 
 ## Package and Environment Management
 

@@ -209,26 +209,45 @@ process <- function(x) {
 
 ### Error Handling
 
+Prefer `cli::cli_abort()` over `stop()` for user-facing errors. Structure messages as a problem statement followed by context bullets.
+
 ```r
-# Good - Informative error messages
-validate_input <- function(x, name = "x") {
+# Good - cli::cli_abort() with structured bullets
+# Bullet types: x = error detail, i = info/hint, ! = warning
+validate_input <- function(x, threshold = 0) {
   if (!is.numeric(x)) {
-    stop("`", name, "` must be numeric, not ", typeof(x), call. = FALSE)
+    cli::cli_abort(c(
+      "{.arg x} must be numeric.",
+      x = "You supplied {.cls {class(x)}}.",
+      i = "Convert with {.fn as.numeric} first."
+    ))
   }
-  if (length(x) == 0) {
-    stop("`", name, "` cannot be empty", call. = FALSE)
+  if (any(x < threshold)) {
+    cli::cli_abort(c(
+      "{.arg x} must be >= {threshold}.",
+      x = "{sum(x < threshold)} value{?s} below threshold.",
+      i = "Set {.arg threshold} to adjust the lower bound."
+    ))
   }
 }
 
-# Good - Use cli for user-friendly messages
-validate_input_cli <- function(x) {
-  if (!is.numeric(x)) {
-    cli::cli_abort(
-      "{.arg x} must be numeric, not {.cls {class(x)}}."
-    )
-  }
-}
+# Good - reference argument names, functions, and classes with inline markup
+cli::cli_abort(c(
+  "{.fn my_func} requires a data frame.",
+  x = "{.arg data} is {.cls {class(data)}}, not {.cls data.frame}.",
+  i = "Did you mean to call {.fn as.data.frame}?"
+))
+
+# Avoid - stop() with string concatenation
+stop("`x` must be numeric, not ", typeof(x), call. = FALSE)
 ```
+
+**Inline markup tokens:**
+- `{.arg x}` — argument name (backtick-formatted)
+- `{.fn foo}` — function name
+- `{.cls {class(x)}}` — class name
+- `{.val {value}}` — literal value
+- `{?s}` — pluralisation (`value{?s}` → "value" or "values")
 
 ### Default Arguments
 
