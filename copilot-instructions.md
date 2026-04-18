@@ -16,7 +16,7 @@ Use these instructions when working on R code in this repository or repositories
 ## R coding standards
 
 - Prefer `|>` over `%>%`.
-- Prefer `map_*()` / `vapply()` over type-unstable `sapply()`.
+- Prefer `purrr::map_*()` over type-unstable `sapply()`.
 - Prefer per-operation grouping (`.by`) over `group_by()/ungroup()` where possible.
 - Prefer `join_by()` instead of legacy named-vector join syntax.
 - Use `TRUE` / `FALSE` (not `T` / `F`).
@@ -42,5 +42,4 @@ Use these instructions when working on R code in this repository or repositories
 ## Environment guidance
 
 - Use `pak` for package installation.
-- Use `renv` for project dependency isolation.
 - Use `uv` for Python environment management when Python is involved.
