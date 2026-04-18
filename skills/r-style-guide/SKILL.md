@@ -41,19 +41,19 @@ my_function <- function(.data, ...) {
 ## Style Guide Essentials
 
 ### Object Names
-
-- **Use snake_case for all names**
+- **Use BigCamelCase for function names. Function name should start with `func_` followed by a descriptive name**
+- **Use snake_case for variable names**
 - **Variable names = nouns, function names = verbs**
 - **Avoid dots except for S3 methods**
 
 ```r
 # Good
 day_one
-calculate_mean
+func_CalculateMean
 user_data
 
 # Avoid
-DayOne
+Day_One <- function(){}
 calculate.mean
 userData
 ```
@@ -183,6 +183,7 @@ do_everything <- function(path, output_path, ...) {
 
 ### Return Values
 
+- **Explicitly return for functions**
 ```r
 # Good - Explicit return for complex functions
 calculate_metrics <- function(data) {
@@ -194,9 +195,9 @@ calculate_metrics <- function(data) {
   return(metrics)
 }
 
-# Good - Implicit return for simple functions
+# Good - Explicit return for simple functions
 square <- function(x) {
-  x^2
+  return(x^2)
 }
 
 # Avoid - Return in the middle without good reason
