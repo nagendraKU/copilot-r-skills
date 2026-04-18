@@ -15,8 +15,9 @@ Use these instructions when working on R code in this repository or repositories
 
 ## R coding standards
 
+- Explicitly qualify namespaces for all external functions (example: `purrr::map`). No need to do this for base functions.
 - Prefer `|>` over `%>%`.
-- Prefer `purrr::map_*()` over type-unstable `sapply()`.
+- Prefer `purrr::map_*()` over type-unstable R `apply()` style functions.
 - Prefer per-operation grouping (`.by`) over `group_by()/ungroup()` where possible.
 - Prefer `join_by()` instead of legacy named-vector join syntax.
 - Use `TRUE` / `FALSE` (not `T` / `F`).
